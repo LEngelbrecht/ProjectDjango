@@ -1,0 +1,16 @@
+{% extends _base.html %}
+
+{% block contenu %}
+{% if user.is_authenticated %}
+<h1> Bienvenue sur Twitter, {{ user.username }}. </h1>
+<form>
+{tweet.as_p}
+<input type="submit" value="twitter"/>
+</form>
+{% if tweets %}
+
+{% endif %}
+{% else %}
+<h1> Bienvenue nouveau utilisateur. Veuillez vous connecter</h1>
+{% endif %}
+

@@ -1,0 +1,4 @@
+{% csrf_token %}
+
+{{ inscription_form.as_p}}
+
