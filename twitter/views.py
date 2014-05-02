@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response, render
+from django.shortcuts import render_to_response, render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth import authenticate, login, logout
@@ -52,11 +52,26 @@ def user_profil(request, username, abo= False):
 
 @login_required(login_url="/login")
 def details(request, username, abo= False):
-	if request.user.is_authenticate():
-		login = UserProfil.object(pk = request.user.pk)
+	if request.user.is_authenticated():
 		user = get_object_or_404(UserProfil, username = username)
-	contexte={'login' : login, 'user' : user}
+	contexte={'user' : user}
 	return render(request,'profil.html', contexte)
+
+def envoyer_tweet(request):
+	if request.user.is_authenticated():
+		tweet_form = TweetForm(request.POST)
+		if request == "POST":
+			tweet = Tweet()
+			tweet.message = tweet_form.cleaned_data['message']
+			tweet.date = datetime.date.today()
+			tweet.user = get_object_or_404(UserProfil)
+			tweet.save()
+			contexte = {'tweet' : tweet}
+			return render(request, 'bienvenue.html', contexte)
+		else:
+			tweet_form = TweetForm()
+	contexte = {'tweet_form' : tweet_form}	
+	return render(request,'bienvenue.html', contexte)
 
 def accueil(request):
 	return render(request,"index.html")
@@ -76,7 +91,8 @@ def connection(request):
 	if user is not None:
 		if user.is_active:
 			login(request, user)
-			contexte = {'user' : user}
+			tweet_form = TweetForm()
+			contexte = {'user' : user, 'tweet_form' : tweet_form}
 			return render(request, 'bienvenue.html', contexte)
 		else:
 			login_form = LoginForm()

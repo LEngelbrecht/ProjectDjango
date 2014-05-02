@@ -4,15 +4,16 @@
 
 		
 	<h1>{{ user.username }}<h1>
-	<a href="{% url profil %}"> Profil</a>
+	<a href="{% url 'profil' user.username %}"> Profil</a>
 	<a href="/logout"> Deconnection</a>
 	<p> Nombre de Tweet : {{ nombre_tweet}} </p> 
 	<p> Nombre d'abonnement : {{ nombre_abonnement}}</p>
 	<p> Nombre d'abonnée : {{ nombre_abonnee}}</p>
-	<form>
-	{% csrf_token %}
-	{{tweet.as_p}}
-	<input type="submit" value="twitter"/>
+	<form method = "POST" name="Tweet" action="/tweet">
+		{% csrf_token %}
+		{{tweet_form.as_p}}
+	<input type="submit" value="tweetter"/>
+	<input type="reset" value="Effacer"/>
 	</form>
 	{% if tweets %}
 		<ul>
