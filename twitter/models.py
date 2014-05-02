@@ -1,12 +1,18 @@
 from django.db import models
+from django.contrib.auth.models import User
 
-class User(models.Model):
-        name = models.CharField(max_length=200)
-	firstname = models.CharField(max_length=200)
-	pseudo = models.CharField(max_length=100)
-	email = models.CharField(max_length=200)
+#Ajout d'une photo au profil de l'Utilisateur
+class UserProfil(User):
+      Avatar = models.ImageField(upload_to = "Images/")
+       
 
+# Gestion des Tweets
 class Tweet(models.Model):
-      user = models.ForeignKey(User)
+      user = models.ForeignKey(UserProfil)
       message= models.CharField(max_length=140)
       date = models.DateTimeField('Date published')
+
+# Gestion des Abonnements
+class Abonnement(models.Model):
+	suiveur = models.ForeignKey(UserProfil, related_name = "suiveur")
+	suivi = models.ForeignKey(UserProfil, related_name = "suivi")

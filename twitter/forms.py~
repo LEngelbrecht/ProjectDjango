@@ -1,8 +1,31 @@
 from django import forms
-from twitter.models import User
+from django.contrib.auth.models import User
+from twitter.models import UserProfil, Tweet
 
 class InscriptionForm (forms.ModelForm):
-      class Meta:
-    	model = User
-        fields  = ['name', 'firstname' , 'email', 'password']
+	password2 = forms.CharField(label = "Confirmation du mot de passe", max_length=100, widget=forms.PasswordInput)
+        class Meta:
+    		model = UserProfil
+        	fields  = ['last_name','first_name','username', 'Avatar', 'email' , 'password', 'password2']
+
+        def clean_password2(self):
+		password1 = self.cleaned_data.get("password","")
+		password2 = self.cleaned_data["passxord2"]
+		if password1!=password2:
+			raise forms.ValidationError("Les deux mots de passe sont differents")
+		return password2
+
+class LoginForm(forms.ModelForm):
+	class Meta : 
+		model = User
+		fields = ['username', 'password']
+		widget = {'password', forms.PasswordInput}
+	
+
+class TweetForm (forms.ModelForm):
+	class Meta:
+   		model = Tweet
+		fields = ['message']
+
+
 
