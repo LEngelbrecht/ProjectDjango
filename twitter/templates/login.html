@@ -1,8 +1,9 @@
-<form name="login" method="POST" action="">
-{% csrf_token %}
+<form name="login" method="POST" action="/login">
+
 {{ login_form.as_p}}
 <input type="submit" value="Conection">
 <input type = "reset" Value ="Init">
+{% csrf_token %}
 </form>
 
 

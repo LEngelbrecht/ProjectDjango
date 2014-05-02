@@ -1,8 +1,5 @@
-{% extends _base.html %}
+{% extends "_base.html" %}
 
 {% block contenu %}
-{user.Avatar}
-<h1> Profil de {user.last_name} {user.first_name} <h1>
 
-{% endblock %}
-
+	<h1> Accueil de {{ user.username }}. </h1>

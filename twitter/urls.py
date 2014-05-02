@@ -13,5 +13,6 @@ urlpatterns = patterns('',
     url(r'^$', views.index),
     url(r'^index$', views.index, name='index'),
     url(r'^login$', views.connection, name='login'),
+    url(r'^profil$', views.user_profil, name='profil'),
     url(r'^inscription$', views.create_account, name='inscription'),
 )

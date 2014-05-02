@@ -3,13 +3,13 @@ from django.contrib.auth.models import User
 
 #Ajout d'une photo au profil de l'Utilisateur
 class UserProfil(User):
-      Avatar = models.ImageField(upload_to = "Images/")
+      Avatar = models.ImageField(upload_to = "Images/", blank = True)
        
 
 # Gestion des Tweets
 class Tweet(models.Model):
       user = models.ForeignKey(UserProfil)
-      message= models.CharField(max_length=140)
+      message = models.CharField(max_length=140)
       date = models.DateTimeField('Date published')
 
 # Gestion des Abonnements
