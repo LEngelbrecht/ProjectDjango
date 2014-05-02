@@ -31,7 +31,7 @@ def create_account(request):
 def user_profil(request, username, abo= False):
 	if request.user.is_authenticated():
 	      login = UserProfil.object(pk = request.user.pk)	
-	      user = get_object_or_404(UserProfil, username= username)
+	      user = get_object_or_404(UserProfil, username = username)
 	      if login != user or abo == False:
 			abonnement = Abonnement.objects.filter(suiveur = user).filter(suivi = login)
 	      		tweets = Tweet.objects.all().order_by('date')
@@ -49,6 +49,18 @@ def user_profil(request, username, abo= False):
 	      return render(request,'bienvenue.html', contexte)
 
 	return index(request)
+
+@login_required(login_url="/login")
+def details(request, username, abo= False):
+	if request.user.is_authenticate():
+		login = UserProfil.object(pk = request.user.pk)
+		user = get_object_or_404(UserProfil, username = username)
+	contexte={'login' : login, 'user' : user}
+	return render(request,'profil.html', contexte)
+
+def accueil(request):
+	return render(request,"index.html")
+
 def index(request):
 	if request.user.is_authenticated():
 		user = request.user
@@ -64,7 +76,7 @@ def connection(request):
 	if user is not None:
 		if user.is_active:
 			login(request, user)
-			contexte = {'user' : user,}
+			contexte = {'user' : user}
 			return render(request, 'bienvenue.html', contexte)
 		else:
 			login_form = LoginForm()

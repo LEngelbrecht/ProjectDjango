@@ -2,8 +2,10 @@
 
 {% block contenu %}
 
-	<h1>{{ user.username }}. </h1>
-	<a href ="/profil"> Profil</a>
+		
+	<h1>{{ user.username }}<h1>
+	<a href="{% url profil %}"> Profil</a>
+	<a href="/logout"> Deconnection</a>
 	<p> Nombre de Tweet : {{ nombre_tweet}} </p> 
 	<p> Nombre d'abonnement : {{ nombre_abonnement}}</p>
 	<p> Nombre d'abonnée : {{ nombre_abonnee}}</p>
