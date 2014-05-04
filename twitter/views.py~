@@ -57,6 +57,7 @@ def details(request, username, abo= False):
 	contexte={'user' : user}
 	return render(request,'profil.html', contexte)
 
+@login_required(login_url="/login")
 def envoyer_tweet(request):
 	if request.user.is_authenticated():
 		tweet_form = TweetForm(request.POST)
@@ -91,7 +92,8 @@ def connection(request):
 	if user is not None:
 		if user.is_active:
 			login(request, user)
-			contexte = {'user' : user}
+			tweet_form = TweetForm()
+			contexte = {'user' : user, 'tweet_form' : tweet_form}
 			return render(request, 'bienvenue.html', contexte)
 		else:
 			login_form = LoginForm()

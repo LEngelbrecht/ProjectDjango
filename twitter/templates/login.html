@@ -1,9 +1,16 @@
-<form name="login" method="POST" action="/login">
+{% extends "_base.html" %}
+
+{% block contenu %}
+
+	<center><h1> Connection </h1></center>
+<form class = "form-horizontal" name="login" method="POST" action="/login">
 
 {{ login_form.as_p}}
-<input type="submit" value="Conection">
-<input type = "reset" Value ="Init">
+<input class = "btn btn-primary" type="submit" value="Conection">
+<input class = "btn btn-default" type = "reset" Value ="Init">
 {% csrf_token %}
-</form>
+</form> 
+
+{% endblock%}
 
 

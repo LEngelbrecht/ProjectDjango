@@ -1,7 +1,14 @@
-<form name="creation" method="POST" id = "Inscription" action="/inscription">
+{% extends "_base.html" %}
+
+{% block contenu %}
+
+<center><h1>Formulaire d'inscription</h1></center>
+
+<form  class = "form-horizontal" name="creation" method="POST" id = "Inscription" action="/inscription">
 {% csrf_token %}
 {{ inscription_form.as_p}}
-<input type="submit" value="Creation">
+<input class = "btn btn-primary" type="submit" value="Creation">
 <input type="reset" value="Init">
 </form>
 
+{% endblock %}

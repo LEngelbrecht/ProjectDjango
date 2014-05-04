@@ -2,5 +2,10 @@
 
 {% block contenu %}
 
+	<h1>Bienvenue sur Twitter</1>
+
+<p class= "text-left"> <a href ="/login"> Se connecter </a></p>
+<small> <a href ="/inscription">S'inscrire</a></small>
+
 
 {% endblock%}

@@ -57,20 +57,22 @@ def details(request, username, abo= False):
 	contexte={'user' : user}
 	return render(request,'profil.html', contexte)
 
+@login_required(login_url="/login")
 def envoyer_tweet(request):
 	if request.user.is_authenticated():
-		tweet_form = TweetForm(request.POST)
+		login= UserProfil.objects.get(pk = request.user.pk)
 		if request == "POST":
-			tweet = Tweet()
-			tweet.message = tweet_form.cleaned_data['message']
-			tweet.date = datetime.date.today()
-			tweet.user = get_object_or_404(UserProfil)
-			tweet.save()
-			contexte = {'tweet' : tweet}
-			return render(request, 'bienvenue.html', contexte)
+			tweet_form = TweetForm(request.POST)
+			if tweet_form.is_valide():
+				tweet = Tweet()
+				tweet.message = tweet_form.cleaned_data['message']
+				tweet.date = datetime.date.today()
+				tweet.user = login
+				tweet.save()
+				return index(request)
 		else:
 			tweet_form = TweetForm()
-	contexte = {'tweet_form' : tweet_form}	
+	contexte = {'tweet_form' : tweet_form, 'login' : login}	
 	return render(request,'bienvenue.html', contexte)
 
 def accueil(request):
