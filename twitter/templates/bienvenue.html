@@ -9,25 +9,25 @@
 	<small><a href="/logout"> Deconnection</a></small><br>
 	<small> Nombre de Tweet : {{ nombre_tweet}} </small> <br>
 	<small> Nombre d'abonnement : {{ nombre_abonnement}}</small><br>
-	<small>> Nombre d'abonnée : {{ nombre_abonnee}}</small><br>
-	<form method= "POST" name="Suivre" action="">
-		<input type="submit" value="Follow"/>	
+	<small> Nombre d'abonnée : {{ nombre_abonnee}}</small><br>
+	<form method= "POST" name="Suivre" action="#">
+		<input class = "btn btn-primary" type="submit" value="Follow"/>	
 	</form>	
 	<form class = "form-horizontal" method = "POST" name="Tweet" action="/tweet">
 		{% csrf_token %}
 		{{tweet_form.as_p}}
-	<input type="submit" value="tweetter"/>
-	<input type="reset" value="Effacer"/>
+	<input class = "btn btn-success" type="submit" value="Tweetter"/>
+	<input class = "btn btn-default" type="reset" value="Effacer"/>
 	</form>
 	{% if tweets %}
 		<ul>
 		{% for tweet in tweets %}
 			<li>{ tweet.message }</li><br>
-			<p>{ tweet.date }</p>
+			<small>{ tweet.date }</small>
 		{% endfor %}
 		</ul>
 	{% else %}
-		<p> Pas de tweet </p>
+		<span> Pas de tweet </span>
 	{% endif %}
 
 {% endblock %}

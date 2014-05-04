@@ -6,7 +6,9 @@ from django.forms import ModelForm
 from django.http import HttpResponse, HttpResponseRedirect
 from twitter.models import UserProfil, Tweet, Abonnement
 from twitter.forms import InscriptionForm, TweetForm, LoginForm
+import datetime
 
+# Inscription d'un utilisateur
 def create_account(request):
    if request.method == 'POST':
    	inscription_form = InscriptionForm(request.POST)
@@ -19,14 +21,15 @@ def create_account(request):
 		user.set_password(inscription_form.cleaned_data["password"])
 		user.Avatar = inscription_form.cleaned_data["Avatar"]
 		user.save()
-		Login(request)
-		contexte = {'user' : user}
-		return render(request, 'bienvenue.html', user)
+		tweet_form = TweetForm()
+		contexte = {'user' : user, 'tweet_form' : tweet_form }
+		return render(request, 'bienvenue.html', contexte)
    else:
    	inscription_form = InscriptionForm()
    contexte = {'inscription_form' : inscription_form}
    return render(request, 'create.html', contexte)
 
+#Page d'accueil de l'utilisateur apres qu'il se doit connecter
 @login_required(login_url = '/login')
 def user_profil(request, username, abo= False):
 	if request.user.is_authenticated():
@@ -45,11 +48,12 @@ def user_profil(request, username, abo= False):
 	      nombre_tweet = Tweet.object.filter(user = user).count()-1
               nombre_abonnee = Abonnement.object.filter(suiveur = user).count()-1
  	      nombre_abonnement = Abonnement.object.filter(suivi = user).count()-1
-	      contexte = {'login' : login, 'user' : user,  'nombre_tweet' : nombre_tweet, 'nombre_abonnee' : nombre_abonnee, 'nombre_abonnement' : nombre_abonnement,}
+	      contexte = {'login' : login, 'user' : user,  'nombre_tweet' : nombre_tweet, 'nombre_abonnee' : nombre_abonnee, 'nombre_abonnement' : nombre_abonnement, 'tweets' : tweets}
 	      return render(request,'bienvenue.html', contexte)
 
 	return index(request)
 
+#Details concernant l'utilisateur
 @login_required(login_url="/login")
 def details(request, username, abo= False):
 	if request.user.is_authenticated():
@@ -57,6 +61,8 @@ def details(request, username, abo= False):
 	contexte={'user' : user}
 	return render(request,'profil.html', contexte)
 
+# Envoyer des tweets
+@csrf_protect
 @login_required(login_url="/login")
 def envoyer_tweet(request):
 	if request.user.is_authenticated():
@@ -69,12 +75,14 @@ def envoyer_tweet(request):
 				tweet.date = datetime.date.today()
 				tweet.user = login
 				tweet.save()
-				return index(request)
+				return redirect(user_profil)
 		else:
 			tweet_form = TweetForm()
-	contexte = {'tweet_form' : tweet_form, 'login' : login}	
+	tweets = Tweet.objects.all().order_by('date')
+	contexte = {'tweets': tweets, 'tweet_form' : tweet_form}
 	return render(request,'bienvenue.html', contexte)
 
+# Page d'accueil
 def accueil(request):
 	return render(request,"index.html")
 
@@ -85,6 +93,7 @@ def index(request):
 		user = UserProfil()
 	return user_profil(request, user.username, True)
 
+#Connection
 def connection(request):
     if request.method == 'POST':
 	username = request.POST['username']
@@ -94,7 +103,8 @@ def connection(request):
 		if user.is_active:
 			login(request, user)
 			tweet_form = TweetForm()
-			contexte = {'user' : user, 'tweet_form' : tweet_form}
+			tweets = Tweet.objects.all().order_by('date')
+			contexte = {'user' : user, 'tweet_form' : tweet_form, 'tweets' : tweets}
 			return render(request, 'bienvenue.html', contexte)
 		else:
 			login_form = LoginForm()
@@ -106,9 +116,9 @@ def connection(request):
     contexte = {'login_form' : login_form}
     return render(request, 'login.html', contexte)
 
+#Deconnection
 def deconnection(request):
 	if request.user.is_authenticated():
 		logout(request)
 	return index(request)
-
 
